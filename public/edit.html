@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-    <!-- فرم ویرایش فیلم -->
     <div class="form-container dark" id="edit-container">
         <h2>Edit Movie</h2>
         <form id="edit-movie-form">
@@ -47,7 +46,6 @@
         const movieId = urlParams.get('id');
         const token = localStorage.getItem('token');
     
-        // بررسی کنید که movieId موجود است
         if (!movieId) {
             alert('Movie ID is missing!');
             return;
@@ -71,7 +69,6 @@
     
             const movie = await response.json();
     
-            // Pre-fill the form with the movie data
             document.getElementById('title').value = movie.title;
             document.getElementById('description').value = movie.description;
             document.getElementById('imdbRating').value = movie.imdbRating;
@@ -79,9 +76,8 @@
             document.getElementById('imageUrl').value = movie.imageUrl;
             document.getElementById('videoUrl').value = movie.videoUrl;
     
-            // Add an event listener for the "Save Changes" button
             document.getElementById('saveChangesButton').addEventListener('click', async (event) => {
-                event.preventDefault();  // جلوگیری از ارسال فرم به صورت پیش‌فرض
+                event.preventDefault(); 
 
                 const updatedMovie = {
                     title: document.getElementById('title').value,
