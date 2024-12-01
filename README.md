@@ -1,79 +1,77 @@
-
-
 # Streamer 🎥  
-**یک پلتفرم استریم آنلاین برای نمایش و مدیریت فیلم‌ها!**
+**An online streaming platform for managing and displaying movies!**
 
-## 📋 توضیحات پروژه
-این پروژه یک اپلیکیشن وب برای استریم ویدیوها و مدیریت اطلاعات آن‌ها است. با استفاده از Node.js و Express ساخته شده و از دیتابیس MySQL برای ذخیره اطلاعات فیلم‌ها استفاده می‌کند. این اپلیکیشن به کاربران اجازه می‌دهد:
-- **مشاهده ویدیوها** به صورت استریم
-- **افزودن، حذف و ویرایش فیلم‌ها** (با احراز هویت JWT)
-- **جستجو و مشاهده اطلاعات فیلم‌ها**
-- **دریافت کد embed برای نمایش فیلم‌ها در صفحات وب دیگر**
-
----
-
-## 🚀 امکانات
-1. **API‌ مدیریت فیلم‌ها:**
-   - مشاهده لیست فیلم‌ها
-   - دریافت اطلاعات یک فیلم خاص
-   - افزودن فیلم (با احراز هویت)
-   - حذف فیلم (با احراز هویت)
-   - به‌روزرسانی اطلاعات فیلم (با احراز هویت)
-
-2. **استریم ویدیو:**
-   - قابلیت استریم ویدیو با پشتیبانی از "Range Requests" برای بهبود عملکرد پخش
-
-3. **احراز هویت:**
-   - احراز هویت مبتنی بر JWT برای محافظت از endpointهای حساس
-
-4. **کد Embed:**
-   - قابلیت دریافت کد HTML برای نمایش ویدیو در صفحات دیگر
+## 📋 Project Description
+This project is a web application designed for video streaming and movie information management. Built with Node.js and Express, it uses MySQL as the database to store movie data. The application allows users to:
+- **Stream videos**
+- **Add, delete, and edit movies** (protected by JWT authentication)
+- **Search and view movie information**
+- **Generate embed codes for displaying videos on external websites**
 
 ---
 
-## 📁 ساختار فایل‌ها
+## 🚀 Features
+1. **Movie Management API:**
+   - Retrieve a list of movies
+   - View details of a specific movie
+   - Add a new movie (requires authentication)
+   - Delete a movie (requires authentication)
+   - Update movie information (requires authentication)
+
+2. **Video Streaming:**
+   - Stream videos with support for "Range Requests" to enhance playback performance
+
+3. **Authentication:**
+   - JWT-based authentication for protecting sensitive endpoints
+
+4. **Embed Code:**
+   - Generate HTML embed code to display videos on external websites
+
+---
+
+## 📁 Project Structure
 ```
 Streamer/
-├── public/                 # فایل‌های عمومی (CSS، HTML)
-├── img/                    # پوشه تصاویر
-├── videos/                 # فایل‌های ویدیویی (باید ایجاد شود)
-├── index.js                # فایل اصلی سرور
-├── package.json            # اطلاعات پروژه و وابستگی‌ها
-├── README.md               # توضیحات پروژه
+├── public/                 # Public files (CSS, HTML)
+├── img/                    # Image directory
+├── videos/                 # Video files (must be created)
+├── index.js                # Main server file
+├── package.json            # Project details and dependencies
+├── README.md               # Project documentation
 ```
 
 ---
 
-## 🛠️ نحوه نصب و اجرا
-برای راه‌اندازی پروژه مراحل زیر را دنبال کنید:
+## 🛠️ Installation and Setup
+Follow these steps to set up the project:
 
-1. کلون کردن پروژه:
+1. Clone the repository:
    ```bash
    git clone https://github.com/Edrisss154/Streamer.git
    cd Streamer
    ```
 
-2. نصب وابستگی‌ها:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. ایجاد دیتابیس MySQL:
-   - یک دیتابیس با نام `movies_db` ایجاد کنید.
-   - فایل `index.js` را ویرایش کرده و نام کاربری و رمز عبور MySQL خود را تنظیم کنید.
+3. Create a MySQL database:
+   - Create a database named `movies_db`.
+   - Update the `index.js` file with your MySQL username and password.
 
-4. اجرا کردن سرور:
+4. Run the server:
    ```bash
    node index.js
    ```
 
-5. دسترسی به پروژه:
-   - سرور روی `http://localhost:3000` اجرا می‌شود.
+5. Access the application:
+   - The server will be available at `http://localhost:3000`.
 
 ---
 
-## 🔑 احراز هویت
-برای endpointهایی که نیاز به احراز هویت دارند (مانند افزودن، حذف یا ویرایش فیلم‌ها)، از JWT استفاده شده است. برای دریافت توکن، از endpoint `/api/login` استفاده کنید:
+## 🔑 Authentication
+For endpoints requiring authentication (e.g., adding, deleting, or editing movies), JWT is used. Obtain a token via the `/api/login` endpoint:
 ```bash
 POST /api/login
 {
@@ -86,44 +84,44 @@ POST /api/login
 
 ## 📦 API Endpoints
 
-### 1. **مدیریت فیلم‌ها**
+### 1. **Movie Management**
 - **GET /api/movies**  
-  دریافت لیست تمام فیلم‌ها
+  Retrieve a list of all movies
 - **GET /api/movies/:id**  
-  دریافت اطلاعات یک فیلم خاص
+  View details of a specific movie
 - **POST /api/movies**  
-  افزودن فیلم (نیاز به توکن)
+  Add a new movie (requires token)
 - **DELETE /api/movies/:id**  
-  حذف فیلم (نیاز به توکن)
+  Delete a movie (requires token)
 - **PUT /api/movies/:id**  
-  ویرایش فیلم (نیاز به توکن)
+  Update movie information (requires token)
 
-### 2. **استریم ویدیو**
+### 2. **Video Streaming**
 - **GET /api/stream/:id**  
-  استریم ویدیو
+  Stream a video
 
 ### 3. **Embed**
 - **GET /api/embed/:id**  
-  دریافت کد HTML برای نمایش ویدیو
+  Generate HTML embed code for a video
 
 ---
 
-## 🧰 پیش‌نیازها
-- Node.js (نسخه 14 یا بالاتر)
+## 🧰 Requirements
+- Node.js (v14 or later)
 - MySQL
-- مرورگر مدرن
+- Modern web browser
 
 ---
 
-## 💡 نکات مهم
-- فایل‌های ویدیویی باید در پوشه `videos` قرار داده شوند.
-- همچنین میتوانید فقط لینک  فیلم بدهید و فیلم بصورت iframe نمایش داده میشود
-- از کلید امن خودتان به جای `secret_key` برای JWT استفاده کنید.
-- مسیر فایل‌ها و تنظیمات دیتابیس را مطابق با نیاز خود تنظیم کنید.
+## 💡 Important Notes
+- Video files must be placed in the `videos` folder.
+- Alternatively, you can provide a video URL, and it will display as an iframe.
+- Replace the `secret_key` in JWT settings with your own secure key.
+- Adjust file paths and database configurations as needed.
 
 ---
 
-## 👨‍💻 نویسنده
-این پروژه توسط [Edrisss154](https://github.com/Edrisss154) توسعه داده شده است. اگر ایده یا پیشنهادی دارید، خوشحال می‌شوم که بشنوم!
+## 👨‍💻 Author
+This project was developed by [Edrisss154](https://github.com/Edrisss154). If you have any suggestions or ideas, feel free to share them—I’d love to hear your feedback!
 
 ---
