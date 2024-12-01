@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Movie</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <!-- فرم ویرایش فیلم -->
+    <div class="form-container dark" id="edit-container">
+        <h2>Edit Movie</h2>
+        <form id="edit-movie-form">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" placeholder="Movie Title" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="Enter Description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="imdbRating">IMDB Rating</label>
+                <input type="number" step="0.1" id="imdbRating" placeholder="e.g., 8.4" required />
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" placeholder="e.g., Sci-fi, Drama" required />
+            </div>
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" placeholder="e.g., image.png" required />
+            </div>
+            <div class="form-group">
+                <label for="videoUrl">Video URL</label>
+                <input type="text" id="videoUrl" placeholder="e.g., video.mp4" required />
+            </div>
+            <button type="submit" id="saveChangesButton">Save Changes</button>
+        </form>
+        <a  style="margin-top: 20px;" href="index.html"> index </a>
+        <div id="message"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get('id');
+        const token = localStorage.getItem('token');
+    
+        // بررسی کنید که movieId موجود است
+        if (!movieId) {
+            alert('Movie ID is missing!');
+            return;
+        }
+    
+        if (!token) {
+            alert('You must be logged in to edit a movie');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`/api/movies/${movieId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to fetch movie data: ${response.status} ${response.statusText}`);
+            }
+    
+            const movie = await response.json();
+    
+            // Pre-fill the form with the movie data
+            document.getElementById('title').value = movie.title;
+            document.getElementById('description').value = movie.description;
+            document.getElementById('imdbRating').value = movie.imdbRating;
+            document.getElementById('genre').value = movie.genre;
+            document.getElementById('imageUrl').value = movie.imageUrl;
+            document.getElementById('videoUrl').value = movie.videoUrl;
+    
+            // Add an event listener for the "Save Changes" button
+            document.getElementById('saveChangesButton').addEventListener('click', async (event) => {
+                event.preventDefault();  // جلوگیری از ارسال فرم به صورت پیش‌فرض
+
+                const updatedMovie = {
+                    title: document.getElementById('title').value,
+                    description: document.getElementById('description').value,
+                    imdbRating: parseFloat(document.getElementById('imdbRating').value),
+                    genre: document.getElementById('genre').value,
+                    imageUrl: document.getElementById('imageUrl').value,
+                    videoUrl: document.getElementById('videoUrl').value,
+                };
+    
+                try {
+                    const updateResponse = await fetch(`/api/movies/${movieId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        body: JSON.stringify(updatedMovie),
+                    });
+    
+                    if (!updateResponse.ok) {
+                        throw new Error(`Failed to update movie: ${updateResponse.status} ${updateResponse.statusText}`);
+                    }
+    
+                    const updateData = await updateResponse.json();
+                    alert(updateData.message);
+                } catch (error) {
+                    console.error('Error updating movie:', error);
+                    alert('Error updating movie: ' + error.message);
+                }
+            });
+    
+        } catch (error) {
+            console.error('Error fetching movie data:', error);
+            alert('Error fetching movie data: ' + error.message);
+        }
+    });
+    </script>
+</body>
+</html>
