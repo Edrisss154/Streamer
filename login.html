@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Add Movie</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <!-- فرم لاگین -->
+    <div class="form-container dark" id="login-container">
+        <h2>Login</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div id="login-message"></div>
+    </div>
+
+    <!-- فرم افزودن فیلم -->
+    <div class="form-container dark" id="movie-container" style="display: none;">
+        <h2>Add a New Movie</h2>
+        <form id="add-movie-form">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" placeholder="Movie Title" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="Enter Description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="imdbRating">IMDB Rating</label>
+                <input type="number" step="0.1" id="imdbRating" placeholder="e.g., 8.4" required />
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <input type="text" id="genre" placeholder="e.g., Sci-fi, Drama" required />
+            </div>
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="text" id="imageUrl" placeholder="e.g., image.png" required />
+            </div>
+            <div class="form-group">
+                <label for="videoUrl">Video URL</label>
+                <input type="text" id="videoUrl" placeholder="e.g., video.mp4" required />
+            </div>
+            <button type="submit">Add Movie</button>
+            <button id="logout-button" style="margin-top: 20px;">Logout</button>
+        
+        </form>
+        <div id="message"></div>
+        <a  style="margin-top: 20px;" href="index.html"> index </a>
+        <!-- دکمه لاگ‌اوت -->
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginMessageDiv = document.getElementById('login-message');
+        const loginContainer = document.getElementById('login-container');
+        const movieContainer = document.getElementById('movie-container');
+        const logoutButton = document.getElementById('logout-button');
+
+        // فرم لاگین
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', result.token); // ذخیره توکن
+                    loginMessageDiv.textContent = 'Logged in successfully!';
+                    loginMessageDiv.style.color = 'limegreen';
+                    loginContainer.style.display = 'none'; // فرم لاگین مخفی شود
+                    movieContainer.style.display = 'block'; // فرم افزودن فیلم نمایش داده شود
+                } else {
+                    throw new Error(result.message || 'Login failed');
+                }
+            } catch (error) {
+                loginMessageDiv.textContent = error.message;
+                loginMessageDiv.style.color = 'red';
+            }
+        });
+
+        // بررسی لاگین کاربر
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                loginContainer.style.display = 'none';
+                movieContainer.style.display = 'block';
+            }
+        });
+
+        // فرم افزودن فیلم
+        const form = document.getElementById('add-movie-form');
+        const messageDiv = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const movie = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                imdbRating: parseFloat(document.getElementById('imdbRating').value),
+                genre: document.getElementById('genre').value,
+                imageUrl: document.getElementById('imageUrl').value,
+                videoUrl: document.getElementById('videoUrl').value,
+            };
+
+            // دریافت توکن از Local Storage
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                messageDiv.textContent = 'ابتدا وارد حساب کاربری خود شوید.';
+                messageDiv.style.color = 'red';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/movies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // ارسال توکن در هدر Authorization
+                    },
+                    body: JSON.stringify(movie),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    messageDiv.textContent = result.message;
+                    messageDiv.style.color = 'limegreen';
+                    form.reset();
+                } else {
+                    throw new Error(result.message || 'Something went wrong');
+                }
+            } catch (error) {
+                messageDiv.textContent = error.message;
+                messageDiv.style.color = 'red';
+            }
+        });
+
+        // دکمه لاگ‌اوت
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem('token'); // حذف توکن از Local Storage
+            movieContainer.style.display = 'none'; // فرم افزودن فیلم مخفی شود
+            loginContainer.style.display = 'block'; // فرم لاگین نمایش داده شود
+        });
+    </script>
+</body>
+</html>

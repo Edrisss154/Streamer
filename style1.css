@@ -1,0 +1,91 @@
+/* تم دارک برای کل صفحه */
+/* تم دارک برای کل صفحه */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212; /* پس‌زمینه‌ی تیره */
+    color: #e0e0e0; /* متن روشن */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ارتفاع صفحه */
+  }
+  
+  /* فرم اصلی */
+  .form-container {
+    background-color: #1e1e1e; /* پس‌زمینه‌ی فرم */
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    text-align: center;
+  }
+  
+  .form-container h2 {
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  
+  /* هر گروه از فرم */
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 5px;
+  }
+  
+  /* ورودی‌های فرم */
+  form input, form textarea {
+    background-color: #2c2c2c; /* پس‌زمینه‌ی ورودی‌ها */
+    color: #e0e0e0; /* رنگ متن ورودی */
+    border: 1px solid #444; /* حاشیه‌ی خاکستری */
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  form input:focus, form textarea:focus {
+    border-color: #6200ea; /* رنگ حاشیه در فوکوس */
+    outline: none;
+  }
+  
+  /* دکمه */
+  form button {
+    background-color: #6200ea; /* بنفش پررنگ */
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  form button:hover {
+    background-color: #3700b3; /* رنگ تیره‌تر برای حالت هاور */
+  }
+  
+  /* پیام */
+  #message {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  /* استایل پیام‌ها */
+  #message.success {
+    color: limegreen;
+  }
+  
+  #message.error {
+    color: red;
+  }
+  
