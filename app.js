@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete Movie';
-      deleteButton.onclick = () => deleteMovie(movie.id); // دکمه حذف فیلم
+      deleteButton.onclick = () => deleteMovie(movie.id);
       movieCard.appendChild(deleteButton);
 
    
       const editButton = document.createElement('button');
       editButton.textContent = 'Edit Movie';
-      editButton.onclick = () => editMovie(movie.id); // دکمه ویرایش فیلم
+      editButton.onclick = () => editMovie(movie.id); 
       movieCard.appendChild(editButton);
     }
 
