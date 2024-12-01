@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
-const fs = require('fs'); // برای دسترسی به فایل‌ها
-const path = require('path'); // برای مدیریت مسیر فایل‌ها
+const fs = require('fs');
+const path = require('path'); 
 const jwt = require('jsonwebtoken');
 const app = express();
 
@@ -31,8 +31,8 @@ module.exports = authenticateToken;
 // اتصال به دیتابیس MySQL
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // نام کاربری MySQL شما
-  password: '', // رمز عبور MySQL شما
+  user: 'root', // نام کاربری MySQL
+  password: '', // رمز عبور MySQL 
   database: 'movies_db', // نام دیتابیس
 });
 
@@ -44,7 +44,6 @@ db.connect((err) => {
   console.log('اتصال موفق به دیتابیس MySQL برقرار شد.');
 });
 
-// ایجاد جدول (اگر وجود ندارد)
 const createTableQuery = `
   CREATE TABLE IF NOT EXISTS movies (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,7 +61,6 @@ db.query(createTableQuery, (err) => {
   else console.log('جدول movies با موفقیت ایجاد شد.');
 });
 
-// API برای دریافت لیست فیلم‌ها
 app.get('/api/movies', (req, res) => {
  
   const query = 'SELECT * FROM movies';
@@ -75,7 +73,6 @@ app.get('/api/movies', (req, res) => {
   });
 });
 
-// API برای افزودن فیلم جدید
 app.post('/api/movies', authenticateToken, (req, res) => {
   const { title, description, imdbRating, genre, imageUrl, videoUrl } = req.body;
 
@@ -98,7 +95,6 @@ app.post('/api/login', (req, res) => {
   
   const { username, password } = req.body;
 
-  // بررسی اعتبار کاربر (در دیتابیس)
   if (username === 'edrisss' && password === '12041381') {
       const token = jwt.sign({ username }, 'secret_key', { expiresIn: '1h' });
       return res.status(200).json({ token });
@@ -109,7 +105,6 @@ app.post('/api/login', (req, res) => {
   
 });
 
-// API برای استریم ویدیو
 app.get('/api/stream/:id', (req, res) => {
   const videoPath = path.join(__dirname, 'videos', req.params.id); // مسیر فایل
   if (!fs.existsSync(videoPath)) {
@@ -145,12 +140,10 @@ app.get('/api/stream/:id', (req, res) => {
     fs.createReadStream(videoPath).pipe(res);
   }
 });
-// فرض بر این است که از Express.js استفاده می‌کنید
-// API برای حذف فیلم
+
 app.delete('/api/movies/:id', authenticateToken, (req, res) => {
   const movieId = req.params.id;
 
-  // کوئری حذف فیلم از دیتابیس
   const query = 'DELETE FROM movies WHERE id = ?';
   
   db.query(query, [movieId], (err, result) => {
@@ -189,7 +182,6 @@ app.put('/api/movies/:id', authenticateToken, (req, res) => {
     res.status(200).json({ message: 'فیلم با موفقیت به‌روزرسانی شد.' });
   });
 });
-// API برای دریافت جزئیات فیلم بر اساس ID
 app.get('/api/movies/:id', (req, res) => {
   const movieId = req.params.id;
 
@@ -233,5 +225,4 @@ app.get('/api/embed/:id', (req, res) => {
   });
 });
 
-// اجرای سرور
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
