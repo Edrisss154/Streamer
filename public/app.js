@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const moviesContainer = document.getElementById('movies-container');
-  const token = localStorage.getItem('token'); // دریافت توکن از Local Storage
+  const token = localStorage.getItem('token'); 
 
-  // دریافت فیلم‌ها از سرور
+
   const response = await fetch('/api/movies');
   const movies = await response.json();
 
-  // نمایش فیلم‌ها
+
   movies.forEach(movie => {
     const movieCard = document.createElement('div');
     movieCard.className = 'movie-card';
@@ -18,18 +18,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       <button onclick="playMovie('${movie.videoUrl}')">Watch Now</button>
     `;
 
-    // اگر کاربر وارد شده باشد، دکمه حذف و دکمه ویرایش نمایش داده می‌شود
+ 
     if (token) {
-      // دکمه حذف
+  
       const deleteButton = document.createElement('button');
       deleteButton.textContent = 'Delete Movie';
-      deleteButton.onclick = () => deleteMovie(movie.id); // دکمه حذف فیلم
+      deleteButton.onclick = () => deleteMovie(movie.id);
       movieCard.appendChild(deleteButton);
 
-      // دکمه ویرایش
+   
       const editButton = document.createElement('button');
       editButton.textContent = 'Edit Movie';
-      editButton.onclick = () => editMovie(movie.id); // دکمه ویرایش فیلم
+      editButton.onclick = () => editMovie(movie.id); 
       movieCard.appendChild(editButton);
     }
 
@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
-// پخش فیلم
+
 function playMovie(videoUrl) {
   window.open(`/api/stream/${videoUrl}`, '_blank');
 }
 
-// حذف فیلم
+
 async function deleteMovie(movieId) {
-  const token = localStorage.getItem('token'); // دریافت توکن از Local Storage
+  const token = localStorage.getItem('token'); 
 
   if (!token) {
       alert('You must be logged in to delete a movie');
@@ -55,7 +55,7 @@ async function deleteMovie(movieId) {
       const response = await fetch(`/api/movies/${movieId}`, {
           method: 'DELETE',
           headers: {
-              'Authorization': `Bearer ${token}`, // ارسال توکن در هدر Authorization
+              'Authorization': `Bearer ${token}`,
           }
       });
 
@@ -63,7 +63,7 @@ async function deleteMovie(movieId) {
 
       if (response.ok) {
           alert('Movie deleted successfully!');
-          location.reload(); // صفحه مجدداً بارگذاری می‌شود تا فیلم حذف شده از لیست ناپدید شود
+          location.reload();
       } else {
           throw new Error(result.message || 'Failed to delete movie');
       }
@@ -72,9 +72,7 @@ async function deleteMovie(movieId) {
   }
 }
 
-// ویرایش فیلم
 function editMovie(movieId) {
-  // باز کردن فرم ویرایش
   const editForm = document.createElement('form');
   editForm.innerHTML = `
     <h3>Edit Movie</h3>
@@ -93,12 +91,11 @@ function editMovie(movieId) {
     <button type="submit">Save Changes</button>
   `;
   
-  // افزودن فرم به صفحه
   const movieCard = document.getElementById(`movie-card-${movieId}`);
-  movieCard.innerHTML = ''; // پاک کردن محتوای قبلی
+  movieCard.innerHTML = '';
   movieCard.appendChild(editForm);
 
-  // دریافت اطلاعات فیلم از سرور و نمایش آن‌ها در فرم ویرایش
+
   fetch(`/api/movies/${movieId}`)
     .then(response => response.json())
     .then(movie => {
@@ -110,7 +107,6 @@ function editMovie(movieId) {
       document.getElementById('videoUrl').value = movie.videoUrl;
     });
 
-  // ارسال تغییرات به سرور
   editForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -142,7 +138,7 @@ function editMovie(movieId) {
       const result = await response.json();
       if (response.ok) {
         alert('Movie updated successfully!');
-        location.reload(); // صفحه مجدداً بارگذاری می‌شود تا تغییرات نمایش داده شوند
+        location.reload();
       } else {
         throw new Error(result.message || 'Failed to update movie');
       }
