@@ -59,30 +59,26 @@ body {
     opacity: 74%;
     
   }
-  /* لینک‌های معمولی */
 a {
-  color: #6200ea; /* رنگ بنفش برای لینک‌ها */
-  text-decoration: none; /* حذف خط زیر لینک */
+  color: #6200ea; 
+  text-decoration: none;
   font-size: 16px;
   font-weight: bold;
   transition: color 0.3s, text-shadow 0.3s;
 }
 
-/* حالت Hover */
 a:hover {
-  color: #bb86fc; /* رنگ روشن‌تر برای حالت هاور */
-  text-shadow: 0 0 8px #bb86fc; /* ایجاد جلوه درخشان */
+  color: #bb86fc; 
+  text-shadow: 0 0 8px #bb86fc;
   cursor: pointer;
 }
 
-/* حالت فعال (زمان کلیک) */
 a:active {
-  color: #3700b3; /* تغییر رنگ در زمان کلیک */
+  color: #3700b3;
 }
 
-/* حالت لینک بازدید شده */
 a:visited {
-  color: #8c43ea; /* رنگ متفاوت برای لینک‌های بازدیدشده */
+  color: #8c43ea; 
 }
 
 
