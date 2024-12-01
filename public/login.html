@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-    <!-- فرم لاگین -->
     <div class="form-container dark" id="login-container">
         <h2>Login</h2>
         <form id="login-form">
@@ -24,7 +23,6 @@
         <div id="login-message"></div>
     </div>
 
-    <!-- فرم افزودن فیلم -->
     <div class="form-container dark" id="movie-container" style="display: none;">
         <h2>Add a New Movie</h2>
         <form id="add-movie-form">
@@ -58,7 +56,6 @@
         </form>
         <div id="message"></div>
         <a  style="margin-top: 20px;" href="index.html"> index </a>
-        <!-- دکمه لاگ‌اوت -->
     </div>
 
     <script>
@@ -68,7 +65,6 @@
         const movieContainer = document.getElementById('movie-container');
         const logoutButton = document.getElementById('logout-button');
 
-        // فرم لاگین
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
@@ -85,11 +81,11 @@
 
                 const result = await response.json();
                 if (response.ok) {
-                    localStorage.setItem('token', result.token); // ذخیره توکن
+                    localStorage.setItem('token', result.token); 
                     loginMessageDiv.textContent = 'Logged in successfully!';
                     loginMessageDiv.style.color = 'limegreen';
-                    loginContainer.style.display = 'none'; // فرم لاگین مخفی شود
-                    movieContainer.style.display = 'block'; // فرم افزودن فیلم نمایش داده شود
+                    loginContainer.style.display = 'none';
+                    movieContainer.style.display = 'block'; 
                 } else {
                     throw new Error(result.message || 'Login failed');
                 }
@@ -99,7 +95,6 @@
             }
         });
 
-        // بررسی لاگین کاربر
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             if (token) {
@@ -108,7 +103,6 @@
             }
         });
 
-        // فرم افزودن فیلم
         const form = document.getElementById('add-movie-form');
         const messageDiv = document.getElementById('message');
 
@@ -124,7 +118,6 @@
                 videoUrl: document.getElementById('videoUrl').value,
             };
 
-            // دریافت توکن از Local Storage
             const token = localStorage.getItem('token');
 
             if (!token) {
@@ -138,7 +131,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // ارسال توکن در هدر Authorization
+                        'Authorization': `Bearer ${token}`, 
                     },
                     body: JSON.stringify(movie),
                 });
@@ -157,11 +150,10 @@
             }
         });
 
-        // دکمه لاگ‌اوت
         logoutButton.addEventListener('click', () => {
-            localStorage.removeItem('token'); // حذف توکن از Local Storage
-            movieContainer.style.display = 'none'; // فرم افزودن فیلم مخفی شود
-            loginContainer.style.display = 'block'; // فرم لاگین نمایش داده شود
+            localStorage.removeItem('token'); 
+            movieContainer.style.display = 'none';
+            loginContainer.style.display = 'block'; 
         });
     </script>
 </body>
